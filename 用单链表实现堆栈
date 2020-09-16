@@ -1,0 +1,53 @@
+typedef struct tagLinkNode{
+    struct tagLinkNode *next;
+    int val;
+}LinkNode;
+
+typedef struct {
+    LinkNode *top;
+} MyStack;
+
+/** Initialize your data structure here. */
+
+MyStack* myStackCreate() {
+    MyStack *stk = calloc(1, sizeof(MyStack));
+    return stk;
+}
+
+/** Push element x onto stack. */
+void myStackPush(MyStack* obj, int x) {
+    LinkNode *node = malloc(sizeof(LinkNode));
+    node->val = x;
+    node->next = obj->top;
+    obj->top = node;
+}
+
+/** Removes the element on top of the stack and returns that element. */
+int myStackPop(MyStack* obj) {
+    LinkNode *node = obj->top;
+    int val = node->val;
+    obj->top = node->next;
+    free(node);
+    
+    return val;
+}
+
+/** Get the top element. */
+int myStackTop(MyStack* obj) {
+    return obj->top->val;
+}
+
+/** Returns whether the stack is empty. */
+bool myStackEmpty(MyStack* obj) {
+    return (obj->top == NULL);
+}
+
+void myStackFree(MyStack* obj) {
+    while (obj->top != NULL) {
+        LinkNode *node = obj->top;
+        obj->top = obj->top->next;
+        free(node);
+    }
+    free(obj);
+}
+
