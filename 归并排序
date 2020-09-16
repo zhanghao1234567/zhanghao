@@ -1,0 +1,59 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+
+//指针交换辅助函数
+void swap(int *a, int *b)
+{
+    int t=*a;
+    *a=*b;
+    *b=t;
+}
+
+struct ListNode *partion(struct ListNode *left,struct ListNode *right)
+{
+    if(left == right || left->next == right)    //如果只有一个元素或者两个元素，则直接返回第一个指针
+        return left;
+    int pivot = left->val;    //选择头节点作为基准元素
+    struct ListNode *p1 = left ,*p2 = left->next; 
+    /*定义两个辅助指针p1，p2,这两个指针均往next方向移动，移动的过程中保持p1之前的值都小于选定的pivot，
+    p1和p2之间的值都大于选定的pivot，那么当p2走到末尾时交换p1的值与pivot便完成了一次切分*/
+    
+    while(p2 != right)
+    {   
+    //从left开始向后进行一次遍历，大于pivot值时，p1向前走一步，交换p1与p2的值
+        if(p2->val < pivot)
+        {
+            p1 = p1->next;
+            swap(&p1->val, &p2->val);
+        }
+        p2 = p2->next;
+    }
+    swap(&p1->val, &left->val);
+    return p1;
+    free(p2); //释放p2指针的内存
+
+}
+    
+void quick_sort(struct ListNode *left,struct ListNode *right)
+{
+    if(left == right||left ->next == right)    
+        return;
+    struct ListNode *mid = partion(left, right);
+    quick_sort(left, mid);
+    quick_sort(mid->next, right);
+}
+   
+struct ListNode* sortList(struct ListNode* head) 
+{
+    if(head==NULL||head->next==NULL)    
+        return head;
+    quick_sort(head, NULL);
+    return head;
+}
+
