@@ -1,0 +1,30 @@
+int longestSubstring(char * s, int k){
+    int len = strlen(s);
+    if(len < k) return 0;
+    if(k == 1)  return len;
+    int hash[26] = {0};
+    int res = 0;
+    for(int i = 0; i < len; ++i)
+        hash[s[i] - 'a']++;
+    bool flag = true;
+    for(int i = 0; i < len; ++i){
+        if(hash[s[i] - 'a'] < k){
+            flag = false;
+            s[i] = ' ';
+        }
+    }
+    if(flag)       return len; // 递归终止条件
+    int i = 0; 
+	char *p = (char *)malloc((len + 1) * sizeof(char));
+	while(i < len){
+		int index = 0;
+		while(s[i] == ' ' && s[i] != '\0')	i++; 
+		while(s[i] != ' ' && s[i] != '\0')
+			p[index++] = s[i++];
+		p[index] = '\0';
+        int cur = longestSubstring(p, k);
+        res = fmax(cur, res);	
+	}
+    return res;
+}
+
